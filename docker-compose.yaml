@@ -1,0 +1,30 @@
+version: '3'
+services:
+  redis:
+    build: .docker/redis
+    container_name: redis
+    image: redis:doctrine
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - doctrine
+  database:
+    container_name: database
+    image: mysql:latest
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: dfe4da18
+      MYSQL_DATABASE: doctrine
+      MYSQL_USER: giovane
+      MYSQL_PASSWORD: giovane
+    ports:
+      - '3306:3306'
+    volumes:
+      - .docker/mysql:/var/lib/mysql
+    networks:
+      - doctrine
+networks:
+  doctrine:
+    driver: bridge
